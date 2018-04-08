@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :cd, :cards_set
+  attr_accessor :cd, :cards_set, :hand
 
   def initialize(cd)
     @cards_set = CardsSet.new
@@ -7,9 +7,11 @@ class Player
   end
 
   def deal_cards(deck, card_count)
+    cards = []
     1.upto(card_count) do
-      @cards_set.cards << deck.cards.shift
+      cards << deck.cards.shift
     end
-    @cards_set.set_order_index
+    @cards_set.build(cards)
+    @hand = @cards_set.check_hand
   end
 end

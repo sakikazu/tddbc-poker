@@ -6,7 +6,7 @@ class Deck
   def initialize(joker)
     @cards = []
     Card::SUITS.each do |suit|
-      Card::RANKS.each do |rank, point|
+      Card::RANKS.each do |rank, _point|
         @cards << Card.new(suit, rank)
       end
     end

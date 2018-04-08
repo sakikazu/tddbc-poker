@@ -1,4 +1,5 @@
 require './card'
+require './hand'
 
 class CardsSet
   attr_accessor :cards
@@ -7,25 +8,17 @@ class CardsSet
     @cards = []
   end
 
-  def set_order_index
-    @cards.each do |card|
-      card.number_index = Card::RANKS.keys.index(card.rank)
-      card.point_index = Card::RANKS.sort_by { |k, v| v }.map { |rank| rank[0] }.index(card.rank)
-    end
+  def build(cards)
+    @cards = cards
   end
 
   def check_hand
-    formed_hands = []
-    formed_hands << HANDS::STRAIGHT_FLUSH if straight? and flush?
-    formed_hands << HANDS::THREE_OF_A_KIND if three_cards?
-    formed_hands << HANDS::STRAIGHT if straight?
-    formed_hands << HANDS::FLUSH if flush?
-    formed_hands << HANDS::PAIR if pair?
-    formed_hands
-    # todo
-    [
-      { hand_point: HANDS::HIGH_CARD, handing_cards: [1,2] },
-    ]
+    return StraightFlushHand.new(@cards) if straight? and flush?
+    return ThreeOfAKindHand.new(@cards) if three_cards?
+    return StraightHand.new(@cards) if straight?
+    return FlushHand.new(@cards) if flush?
+    return PairHand.new(@cards) if pair?
+    HighCardHand.new(@cards)
   end
 
   def straight?
@@ -43,16 +36,6 @@ class CardsSet
 
   def pair?
     same_rank_count == 2
-  end
-
-  def best_hand
-    hands = check_hand
-    hands.max { |h| h.hand_point }
-  end
-
-  def compare(cards_set)
-    hand = self.best_hand
-    opponent_hand = cards_set.best_hand
   end
 
   private
@@ -76,14 +59,4 @@ class CardsSet
     end
     true
   end
-end
-
-module HANDS
-  HIGH_CARD =        0
-  PAIR =             1
-  FLUSH =            2
-  STRAIGHT =         3
-  THREE_OF_A_KIND =  4
-  STRAIGHT_FLUSH =   5
-  # HANDS = %(HIGH_CARD PAIR FLUSH STRAIGHT THREE_OF_A_KIND STRAIGHT_FLUSH)
 end

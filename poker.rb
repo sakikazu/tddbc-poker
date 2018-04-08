@@ -15,23 +15,20 @@ class Poker
 
   def play
     deal_cards
-    winner = buttle
-    display(winner)
+    buttle
+    display
   end
 
   def deal_cards
     @players.each do |player|
       player.deal_cards(@deck, @play_card_size)
-      player.order_cards
     end
   end
 
   def buttle
-    # todo
-    @players.each do |player|
-      player.cards_set.compare(player.cards_set)
+    @players.sort! do |a, b|
+      a.hand.compare(b.hand)
     end
-    @players.first
   end
 
   private
@@ -49,7 +46,10 @@ class Poker
     deck
   end
 
-  def display(winner)
-    print "勝者: #{winner.cd}\n"
+  def display
+    print "ランキング\n"
+    @players.each do |player|
+      print "#{player.cd}:#{player.hand.name}[#{player.hand.match_cards_notation}]\n"
+    end
   end
 end

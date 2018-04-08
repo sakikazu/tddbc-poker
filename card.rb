@@ -1,6 +1,5 @@
 class Card
-  attr_reader :suit, :rank
-  attr_accessor :number_index, :point_index
+  attr_reader :suit, :rank, :number_index, :point_index
 
   SUIT_HEART = '(h)' #'♥'
   SUIT_SPADE = '(s)' #'♠'
@@ -24,7 +23,7 @@ class Card
     'K' => 13
   }
 
-  # NOTE: rankは'A'でも1でも可
+  # NOTE: rankの引数は'A'でも1でも可
   def initialize(suit, rank)
     @suit = suit
     @rank = if rank.is_a?(Integer)
@@ -32,6 +31,8 @@ class Card
             else
               @rank = rank
             end
+    @number_index = Card.ranks_sorted_by_number.index(@rank)
+    @point_index = Card.ranks_sorted_by_point.index(@rank)
   end
 
   def notation
@@ -40,6 +41,14 @@ class Card
 
   def has_same_suit?(card)
     self.suit == card.suit
+  end
+
+  def self.ranks_sorted_by_number
+    self::RANKS.keys
+  end
+
+  def self.ranks_sorted_by_point
+    self::RANKS.sort_by { |k, v| v }.map { |rank| rank[0] }
   end
 end
 
