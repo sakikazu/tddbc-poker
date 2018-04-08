@@ -3,13 +3,14 @@
 # load '/Users/sakikazu/dev/ruby/tddbc/poker/player.rb'
 require './deck'
 require './card'
+require './cards_set'
 require './player'
 
 class Poker
-  def initialize(player_count, play_card_count)
+  def initialize(player_count, play_card_size)
     @deck = build_deck
     @players = participate(player_count)
-    @play_card_count = play_card_count
+    @play_card_size = play_card_size
   end
 
   def play
@@ -18,20 +19,26 @@ class Poker
     display(winner)
   end
 
-  private
-
   def deal_cards
     @players.each do |player|
-      player.deal_cards(@deck, @play_card_count)
+      player.deal_cards(@deck, @play_card_size)
     end
   end
 
-  def participate(count)
-    players = []
-    1.upto(count) do |n|
-      players << Player.new(n)
+  def buttle
+    # todo
+    @players.each do |player|
+      player.cards_set.compare(player.cards_set)
     end
-    players
+    @players.first
+  end
+
+  private
+
+  def participate(count)
+    (1..count).map do |n|
+      Player.new(n)
+    end
   end
 
   def build_deck(joker = true)
@@ -39,13 +46,6 @@ class Poker
     deck = Deck.new(joker)
     deck.shuffle
     deck
-  end
-
-  def buttle
-    @players.each do |play|
-    end
-    # todo
-    @players.first
   end
 
   def display(winner)

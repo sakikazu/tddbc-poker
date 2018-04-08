@@ -5,9 +5,9 @@ class Deck
 
   def initialize(joker)
     @cards = []
-    ["♥", "♠", "◆", "♣"].each do |suit|
-      1.upto 12 do |rank|
-        @cards << Card.new(suit, rank.to_s)
+    Card::SUITS.each do |suit|
+      Card::RANKS.each do |rank, point|
+        @cards << Card.new(suit, rank)
       end
     end
   end
