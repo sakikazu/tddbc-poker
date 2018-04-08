@@ -22,6 +22,7 @@ class Poker
   def deal_cards
     @players.each do |player|
       player.deal_cards(@deck, @play_card_size)
+      player.order_cards
     end
   end
 

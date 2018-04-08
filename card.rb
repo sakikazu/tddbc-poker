@@ -1,5 +1,6 @@
 class Card
   attr_reader :suit, :rank
+  attr_accessor :number_index, :point_index
 
   SUIT_HEART = '(h)' #'♥'
   SUIT_SPADE = '(s)' #'♠'
@@ -23,9 +24,14 @@ class Card
     'K' => 13
   }
 
+  # NOTE: rankは'A'でも1でも可
   def initialize(suit, rank)
     @suit = suit
-    @rank = rank
+    @rank = if rank.is_a?(Integer)
+              RANKS.keys[rank-1]
+            else
+              @rank = rank
+            end
   end
 
   def notation

@@ -10,6 +10,6 @@ class Player
     1.upto(card_count) do
       @cards_set.cards << deck.cards.shift
     end
+    @cards_set.set_order_index
   end
-
 end
