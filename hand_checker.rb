@@ -1,18 +1,12 @@
 require './card'
 require './hand'
 
-class CardsSet
-  attr_accessor :cards
-
-  def initialize
-    @cards = []
-  end
-
-  def build(cards)
+class HandChecker
+  def initialize(cards)
     @cards = cards
   end
 
-  def check_hand
+  def result
     return StraightFlushHand.new(@cards) if straight? and flush?
     return ThreeOfAKindHand.new(@cards) if three_cards?
     return StraightHand.new(@cards) if straight?
@@ -26,7 +20,7 @@ class CardsSet
   end
 
   def flush?
-    base_suit = @cards.first
+    base_suit = @cards.first.suit
     @cards.all? { |card| card.suit == base_suit }
   end
 

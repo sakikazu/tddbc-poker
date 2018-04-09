@@ -1,14 +1,6 @@
 require './card'
 
 class Hand
-
-  # HIGH_CARD =        0
-  # PAIR =             1
-  # FLUSH =            2
-  # STRAIGHT =         3
-  # THREE_OF_A_KIND =  4
-  # STRAIGHT_FLUSH =   5
-
   def initialize(cards)
     @cards = cards
   end
@@ -62,6 +54,7 @@ class HighCardHand < Hand
     compare_recursive(match_cards, opponent_hand.match_cards, match_cards.size-1)
   end
 
+  # TODO loopでいけるんじゃ？
   def compare_recursive(cards, opponent_cards, n)
     return 0 if n < 0
     if cards[n].point_index > opponent_cards[n].point_index
@@ -158,5 +151,3 @@ class StraightFlushHand < Hand
   def compare_cards(opponent_hand)
   end
 end
-
-

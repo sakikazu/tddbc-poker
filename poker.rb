@@ -3,25 +3,33 @@
 # load '/Users/sakikazu/dev/ruby/tddbc/poker/player.rb'
 require './deck'
 require './card'
-require './cards_set'
+require './hand_checker'
 require './player'
 
 class Poker
-  def initialize(player_count, play_card_size)
+  attr_reader :deck, :players
+
+  def initialize(player_count, play_card_count)
     @deck = build_deck
     @players = participate(player_count)
-    @play_card_size = play_card_size
+    @play_card_count = play_card_count
   end
 
   def play
     deal_cards
     buttle
-    display
+  end
+
+  def display
+    print "ランキング\n"
+    @players.each do |player|
+      print "#{player.cd}:#{player.hand.name}[#{player.hand.match_cards_notation}]\n"
+    end
   end
 
   def deal_cards
     @players.each do |player|
-      player.deal_cards(@deck, @play_card_size)
+      player.deal_cards(@deck, @play_card_count)
     end
   end
 
@@ -39,17 +47,10 @@ class Poker
     end
   end
 
-  def build_deck(joker = true)
+  def build_deck(joker = false)
     # todo includes_joker = false
     deck = Deck.new(joker)
     deck.shuffle
     deck
-  end
-
-  def display
-    print "ランキング\n"
-    @players.each do |player|
-      print "#{player.cd}:#{player.hand.name}[#{player.hand.match_cards_notation}]\n"
-    end
   end
 end
