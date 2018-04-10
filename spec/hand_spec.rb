@@ -1,4 +1,4 @@
-require './hand'
+require_relative '../src/hand'
 
 describe Hand do
   describe HighCardHand do

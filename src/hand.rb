@@ -1,4 +1,4 @@
-require './card'
+require_relative 'card'
 
 class Hand
   def initialize(cards)
@@ -78,7 +78,7 @@ class PairHand < Hand
 
   def match_cards
     found_pair_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 2 }
-    found_pair_cards[1]
+    found_pair_cards[1].sort_by { |card| card.point_index }
   end
 
   require 'byebug'
@@ -97,9 +97,11 @@ class FlushHand < Hand
   end
 
   def match_cards
+    @cards.sort_by { |card| card.point_index }
   end
 
   def compare_cards(opponent_hand)
+    # todo HighCardHandと同じ
   end
 end
 
@@ -113,6 +115,7 @@ class StraightHand < Hand
   end
 
   def match_cards
+    @cards.sort_by { |card| card.point_index }
   end
 
   def compare_cards(opponent_hand)
@@ -130,6 +133,8 @@ class ThreeOfAKindHand < Hand
   end
 
   def match_cards
+    found_three_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 3 }
+    found_three_cards[1].sort_by { |card| card.point_index }
   end
 
   def compare_cards(opponent_hand)
@@ -146,6 +151,7 @@ class StraightFlushHand < Hand
   end
 
   def match_cards
+    @cards.sort_by { |card| card.point_index }
   end
 
   def compare_cards(opponent_hand)

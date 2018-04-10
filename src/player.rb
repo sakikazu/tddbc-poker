@@ -1,4 +1,4 @@
-require './hand_checker'
+require_relative 'hand_checker'
 
 class Player
   attr_accessor :cd, :cards, :hand

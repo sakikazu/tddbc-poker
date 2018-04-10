@@ -1,4 +1,4 @@
-require './card'
+require_relative '../src/card'
 
 describe Card do
   describe 'notation' do

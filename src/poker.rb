@@ -1,10 +1,7 @@
-# load '/Users/sakikazu/dev/ruby/tddbc/poker/deck.rb'
-# load '/Users/sakikazu/dev/ruby/tddbc/poker/card.rb'
-# load '/Users/sakikazu/dev/ruby/tddbc/poker/player.rb'
-require './deck'
-require './card'
-require './hand_checker'
-require './player'
+require_relative 'deck'
+require_relative 'card'
+require_relative 'hand_checker'
+require_relative 'player'
 
 class Poker
   attr_reader :deck, :players

@@ -1,5 +1,5 @@
-require './card'
-require './hand'
+require_relative 'card'
+require_relative 'hand'
 
 class HandChecker
   def initialize(cards)

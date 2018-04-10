@@ -1,4 +1,4 @@
-require './hand_checker'
+require_relative '../src/hand_checker'
 
 describe HandChecker do
   let(:hand_checker) { HandChecker.new(cards) }
