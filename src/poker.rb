@@ -7,12 +7,13 @@ class Poker
   attr_reader :deck, :players
 
   def initialize(player_count, play_card_count)
-    @deck = build_deck
-    @players = participate(player_count)
+    @deck = Deck.new
+    @players = Player.participate(player_count)
     @play_card_count = play_card_count
   end
 
   def play
+    @deck.build
     deal_cards
     buttle
   end
@@ -24,6 +25,8 @@ class Poker
     end
   end
 
+  private
+
   def deal_cards
     @players.each do |player|
       player.deal_cards(@deck, @play_card_count)
@@ -34,20 +37,5 @@ class Poker
     @players.sort! do |a, b|
       a.hand.compare(b.hand)
     end
-  end
-
-  private
-
-  def participate(count)
-    (1..count).map do |n|
-      Player.new(n)
-    end
-  end
-
-  def build_deck(joker = false)
-    # todo includes_joker = false
-    deck = Deck.new(joker)
-    deck.shuffle
-    deck
   end
 end
