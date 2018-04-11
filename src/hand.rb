@@ -14,12 +14,16 @@ class Hand
   end
 
   # TODO: HandCheckerでやるべきだと思う。その際に、ストレートの強さの仕様など含めて、強い順で取得できるように
-  def match_cards
+  def matched_cards
     raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
   end
 
+  def unmatched_cards
+    Card.sort_by_point(@cards - matched_cards)
+  end
+
   def match_cards_notation
-    match_cards.map { |card| card.notation }.join("|")
+    matched_cards.map { |card| card.notation }.join("|")
   end
 
   # NOTE: 順序：強い順
@@ -57,13 +61,13 @@ class HighCardHand < Hand
     0
   end
 
-  def match_cards
-    @cards.sort_by { |card| card.point_index }
+  def matched_cards
+    Card.sort_by_point(@cards)
   end
 
   def compare_cards(opponent_hand)
-    self_cards = match_cards
-    opponent_cards = opponent_hand.match_cards
+    self_cards = matched_cards
+    opponent_cards = opponent_hand.matched_cards
     (self_cards.size-1).downto 0 do |n|
       result = Hand.compare_point(self_cards[n], opponent_cards[n])
       return result if result != 0
@@ -93,16 +97,22 @@ class PairHand < Hand
     1
   end
 
-  def match_cards
-    found_pair_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 2 }
-    found_pair_cards[1].sort_by { |card| card.point_index }
+  def matched_cards
+    _target_rank, found_pair_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 2 }
+    Card.sort_by_point(found_pair_cards)
   end
 
   # NOTE: ペアのランクが同じなら、もう一つのカードで判定する
   def compare_cards(opponent_hand)
-    strongest_card = match_cards.last
-    opponent_strongest_card = opponent_hand.match_cards.last
-    Hand.compare_point(strongest_card, opponent_strongest_card)
+    strongest_card = matched_cards.last
+    opponent_strongest_card = opponent_hand.matched_cards.last
+    result = Hand.compare_point(strongest_card, opponent_strongest_card)
+    return result if result != 0 || unmatched_cards.size == 0
+    (unmatched_cards.size-1).downto 0 do |n|
+      result = Hand.compare_point(unmatched_cards[n], opponent_hand.unmatched_cards[n])
+      return result if result != 0
+    end
+    0
   end
 end
 
@@ -115,13 +125,13 @@ class FlushHand < Hand
     2
   end
 
-  def match_cards
-    @cards.sort_by { |card| card.point_index }
+  def matched_cards
+    Card.sort_by_point(@cards)
   end
 
   def compare_cards(opponent_hand)
-    self_cards = match_cards
-    opponent_cards = opponent_hand.match_cards
+    self_cards = matched_cards
+    opponent_cards = opponent_hand.matched_cards
     (self_cards.size-1).downto 0 do |n|
       result = Hand.compare_point(self_cards[n], opponent_cards[n])
       return result if result != 0
@@ -139,17 +149,18 @@ class StraightHand < Hand
     3
   end
 
-  def match_cards
+  def matched_cards
     cards_ordered_number = @cards.sort_by { |card| card.number_index }
+    # TODO: どうにかしないと
     if cards_ordered_number.map(&:rank) == ["A", "2", "3"]
       return cards_ordered_number
     end
-    @cards.sort_by { |card| card.point_index }
+    Card.sort_by_point(@cards)
   end
 
   def compare_cards(opponent_hand)
-    strongest_card = match_cards.last
-    opponent_strongest_card = opponent_hand.match_cards.last
+    strongest_card = matched_cards.last
+    opponent_strongest_card = opponent_hand.matched_cards.last
     Hand.compare_point(strongest_card, opponent_strongest_card)
   end
 end
@@ -163,14 +174,14 @@ class ThreeOfAKindHand < Hand
     4
   end
 
-  def match_cards
-    found_three_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 3 }
-    found_three_cards[1].sort_by { |card| card.point_index }
+  def matched_cards
+    _target_rank, found_three_cards = @cards.group_by { |card| card.rank }.find { |k, v| v.size == 3 }
+    Card.sort_by_point(found_three_cards)
   end
 
   def compare_cards(opponent_hand)
-    strongest_card = match_cards.last
-    opponent_strongest_card = opponent_hand.match_cards.last
+    strongest_card = matched_cards.last
+    opponent_strongest_card = opponent_hand.matched_cards.last
     Hand.compare_point(strongest_card, opponent_strongest_card)
   end
 end
@@ -184,17 +195,17 @@ class StraightFlushHand < Hand
     5
   end
 
-  def match_cards
+  def matched_cards
     cards_ordered_number = @cards.sort_by { |card| card.number_index }
     if cards_ordered_number.map(&:rank) == ["A", "2", "3"]
       return cards_ordered_number
     end
-    @cards.sort_by { |card| card.point_index }
+    Card.sort_by_point(@cards)
   end
 
   def compare_cards(opponent_hand)
-    strongest_card = match_cards.last
-    opponent_strongest_card = opponent_hand.match_cards.last
+    strongest_card = matched_cards.last
+    opponent_strongest_card = opponent_hand.matched_cards.last
     Hand.compare_point(strongest_card, opponent_strongest_card)
   end
 end

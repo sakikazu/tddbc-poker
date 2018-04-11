@@ -1,13 +1,14 @@
 require_relative 'card'
 require_relative 'hand'
 
+# TODO: Handにまとめても良い気がする
 class HandChecker
   def initialize(cards)
     @cards = cards
   end
 
   def result
-    return StraightFlushHand.new(@cards) if straight? and flush?
+    return StraightFlushHand.new(@cards) if straight? && flush?
     return ThreeOfAKindHand.new(@cards) if three_cards?
     return StraightHand.new(@cards) if straight?
     return FlushHand.new(@cards) if flush?
@@ -41,11 +42,11 @@ class HandChecker
   def continuous_rank?
     number_indexes = @cards.sort_by { |card| card.number_index }.map { |card| card.number_index }
     point_indexes = @cards.sort_by { |card| card.point_index }.map { |card| card.point_index }
-    continuous?(number_indexes) or continuous?(point_indexes)
+    continuous_number?(number_indexes) || continuous_number?(point_indexes)
   end
 
-  def continuous?(ordered_numbers)
-    return false if !ordered_numbers.is_a?(Array) or ordered_numbers.size < 2
+  def continuous_number?(ordered_numbers)
+    return false if !ordered_numbers.is_a?(Array) || ordered_numbers.size < 2
     prev_number = ordered_numbers.shift
     ordered_numbers.each do |num|
       return false unless prev_number + 1 == num

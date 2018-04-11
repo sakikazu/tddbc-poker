@@ -50,5 +50,9 @@ class Card
   def self.ranks_sorted_by_point
     self::RANKS.sort_by { |k, v| v }.map { |rank| rank[0] }
   end
+
+  def self.sort_by_point(cards)
+    cards.sort_by { |card| card.point_index }
+  end
 end
 
