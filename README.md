@@ -1,6 +1,15 @@
 # tddbc-poker
 2018年新人エンジニア研修用
 
+## クラス図
+TODO: 書きたい
+
+## テスト結果
+[rspec](https://github.com/sakikazu/tddbc-poker/blob/master/spec_result.md)
+
+## console上での実行
+[console](https://github.com/sakikazu/tddbc-poker/blob/master/console.md)
+
 # 元課題
 TDDBC仙台07課題：ポーカー
 (http://devtesting.jp/tddbc/?TDDBC%E4%BB%99%E5%8F%B007%2F%E8%AA%B2%E9%A1%8C)
