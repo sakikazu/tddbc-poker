@@ -29,7 +29,7 @@ class Card
     @rank = if rank.is_a?(Integer)
               RANKS.keys[rank-1]
             else
-              @rank = rank
+              rank
             end
     @number_index = Card.ranks_sorted_by_number.index(@rank)
     @point_index = Card.ranks_sorted_by_point.index(@rank)
