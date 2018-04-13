@@ -1,11 +1,14 @@
 # tddbc-poker
 2018年新人エンジニア研修用
 
+## ソースコード一覧
+[merge_sources.md](https://github.com/sakikazu/tddbc-poker/blob/master/merge_sources.md)
+
 ## テスト結果
-[rspec](https://github.com/sakikazu/tddbc-poker/blob/master/spec_result.md)
+[spec_result.md](https://github.com/sakikazu/tddbc-poker/blob/master/spec_result.md)
 
 ## console上での実行
-[console](https://github.com/sakikazu/tddbc-poker/blob/master/console.md)
+[console.md](https://github.com/sakikazu/tddbc-poker/blob/master/console.md)
 
 ## クラス図
 ![default](https://user-images.githubusercontent.com/745130/38714095-976baf9c-3f0f-11e8-990d-21dcdafa3228.png)
